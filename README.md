@@ -35,13 +35,7 @@ This project benchmarks three popular Go HTTP routing approaches:
 - `gorilla/mux` (for distributed caching tests)
 - `wrk` load testing tool (`go install github.com/tsliwowicz/go-wrk@latest`)
 
-### Installation
-```bash
-git clone https://github.com/KingBean4903/BenchHTTPRouters
-cd BenchHTTPRouters
-
-### Running Tests
-`make all`
+### Project Structure
 
 .
 ├── nethttp/          # net/http implementation
@@ -49,3 +43,11 @@ cd BenchHTTPRouters
 ├── gorilla/          # Gorilla/mux implementation
 ├── benchmarks/       # Test scripts and results
 ├── Makefile          # Build/test automation
+
+### Installation
+```bash
+git clone https://github.com/KingBean4903/BenchHTTPRouters
+cd BenchHTTPRouters
+
+make all
+
