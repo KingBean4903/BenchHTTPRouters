@@ -2,12 +2,34 @@ package main
 
 import (
 	"time"
+	"runtime/pprof"
+	"flag"
+	"os"
 	"github.com/KingBean4903/BenchHTTPRouters/models"
 	"github.com/gin-gonic/gin"
 )
 
+var (
+	 cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+	 port       = flag.String("port", "8800", "HTTP server port")
+)
+
 func main() {
+
+	flag.Parse()
 	
+	if *cpuprofile != "" {
+		
+			f, err := os.Create(*cpuprofile)
+			if err != nil {
+					panic(err)
+			}
+			pprof.StartCPUProfile(f)
+			defer pprof.StopCPUProfile()
+
+	}
+
+
 	r := gin.Default()
 
 	r.GET("/stocks/:symbol", func(c *gin.Context) {
@@ -31,4 +53,7 @@ func main() {
 	})
 	
 	r.Run(":8800")
+
+
+	time.Sleep(5 * time.Second)
 }

@@ -2,17 +2,40 @@ package main
 
 import (
 	"encoding/json"
+	"os"
+	"flag"
+	"runtime/pprof"
 	"net/http"
 	"time"
 	"github.com/KingBean4903/BenchHTTPRouters/models"
 )
 
+
+var (
+	 cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+	 port       = flag.String("port", "8700", "HTTP server port")
+)
+
 func main() {
+	flag.Parse()	
+	
+	if *cpuprofile != "" {
+		
+			f, err := os.Create(*cpuprofile)
+			if err != nil {
+					panic(err)
+			}
+			pprof.StartCPUProfile(f)
+			defer pprof.StopCPUProfile()
+
+	}
 	
 	http.HandleFunc("/stocks", func(w http.ResponseWriter, r *http.Request) {
 			symbol := r.URL.Path[len("/stocks/"):]
 			json.NewEncoder(w).Encode(models.Stock{symbol, 182.3})
 	})
+
+
 
 	http.HandleFunc("/stocks/", func(w http.ResponseWriter, r *http.Request) {
 			symbol := r.URL.Path[len("/stocks"):]
@@ -35,6 +58,9 @@ func main() {
 	})
 
 	http.ListenAndServe(":8700", nil)
+
+
+
 
 }
 
