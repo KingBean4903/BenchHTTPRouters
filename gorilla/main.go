@@ -14,6 +14,7 @@ import (
 
 var (
 	 cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
+	 memprofile = flag.String("memprofile", "", "write memory profile to file")
 	 port       = flag.String("port", "8900", "HTTP server port")
 )
 
@@ -29,6 +30,20 @@ func main() {
 			pprof.StartCPUProfile(f)
 			defer pprof.StopCPUProfile()
 
+	}
+
+
+	// Memory profiling
+
+	if *memprofile != " " {
+			defer func() {
+					f, err := os.Create(*memprofile)
+					if err != nil {
+							panic(err)
+					}
+					pprof.WriteHeapProfile(f)
+					f.Close()
+			}()
 	}
 
 

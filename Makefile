@@ -1,4 +1,4 @@
-.PHONY: all build run benchmark benchmark-profile profile clean
+.PHONY: all build run benchmark benchmark-mem-profile benchmark-profile profile clean
 
 # Variables
 PROFILE_DIR := ./profiles
@@ -44,8 +44,24 @@ profile: build
 						$(BIN_DIR)/$$server -cpuprofile $(PROFILE_DIR)/$$server-cpu.pprof & \
 		done
 
+# Memory profiling
+profile-mem: build
+		@mkdir -p $(PROFILE_DIR)
+		@for i in 1 2 3; do \
+						server=$$(echo $(SERVERS) | cut -d' ' -f$$i); \
+						port=$$(echo $(PORTS) | cut -d' ' -f$$i); \
+						echo "Starting $$server with MEM profiling on: $$port"; \
+						$(BIN_DIR)/$$server -memprofile $(PROFILE_DIR)/$$server-mem.txt & \
+		done
+
 #Benchmark with CPU profiling
 benchmark-profile: profile
+						@sleep 2
+						@make benchmark
+						@make clean
+
+#Benchmark with mem profiling
+benchmark-mem-profile: profile-mem
 						@sleep 2
 						@make benchmark
 						@make clean
@@ -57,4 +73,4 @@ clean:
 		@echo "Cleaned up."
 
 # Shortcut: build + run + benchmark
-all: build run benchmark-profile
+all: build run benchmark-mem-profile
