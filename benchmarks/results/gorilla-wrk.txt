@@ -1,0 +1,8 @@
+Running 30s test @ http://localhost:8900/stocks/AAPL
+  12 threads and 1000 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    28.00ms   23.70ms 250.69ms   59.08%
+    Req/Sec     3.19k   736.79    10.31k    75.64%
+  1141465 requests in 30.08s, 162.20MB read
+Requests/sec:  37942.43
+Transfer/sec:      5.39MB
